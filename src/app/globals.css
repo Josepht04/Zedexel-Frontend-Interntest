@@ -42,6 +42,7 @@
   --radius-md: calc(var(--radius) - 2px);
   --radius-lg: var(--radius);
   --radius-xl: calc(var(--radius) + 4px);
+  --font-display: "Oswald";
 }
 
 :root {
@@ -120,4 +121,11 @@
   body {
     @apply bg-background text-foreground;
   }
+}
+
+@font-face {
+  font-family: Oswald;
+  src: url('/Fonts/Oswald-Regular.ttf') format('truetype');
+  font-style: normal;
+  font-weight: 400;
 }
