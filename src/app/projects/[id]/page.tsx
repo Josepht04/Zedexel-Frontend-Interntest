@@ -4,8 +4,11 @@ import Image from "next/image";
 import React, { useState, useEffect } from "react";
 import { Lens } from "@/components/magicui/lens";
 import { Search } from "lucide-react";
+import { use } from "react";
 
-const ViewProject = ({ params }: { params: { id: string } }) => {
+const ViewProject = ({ params }: { params: Promise<{ id: string }> }) => {
+    const { id } = use(params);
+
     interface Project {
         id: string;
         name: string;
