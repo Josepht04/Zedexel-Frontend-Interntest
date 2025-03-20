@@ -1,4 +1,5 @@
 "use client"
+import Link from "next/link";
 import Image from "next/image";
 import React, { useState, useEffect } from "react";
 import { Lens } from "@/components/magicui/lens";
@@ -63,6 +64,7 @@ const ViewProject = ({ params }: { params: { id: string } }) => {
     const renderTabContent = () => {
         switch (activeTab) {
             case 'Details':
+               case 'Details':
                 return (
                     <>
                         <div className="flex flex-row gap-20">
@@ -113,14 +115,31 @@ const ViewProject = ({ params }: { params: { id: string } }) => {
         <>
             <div className="fixed top-1 h-30 w-full pr-44 z-50 bg-white flex justify-between items-center mb-4">
                 <h2 className="font-bold text-2xl font-Oswald">{project.name}</h2>
-                <div className="relative">
+                <div className="relative w-70">
                     <Search className="absolute left-2 text-gray-500" size={20} style={{ top: '11' }} />
                     <input
-                        className="p-2 pl-8 border border-gray-300 rounded-full w-70 focus:outline-none focus:ring focus:ring-blue-900"
+                        className="p-2 pl-8 border border-gray-300 rounded-full w-full focus:outline-none focus:ring focus:ring-blue-900"
                         placeholder="Search by location, user.."
                         value={search}
                         onChange={(e) => setSearch(e.target.value)}
                     />
+                    {filteredResults.length > 0 && (
+                        <div className="absolute bg-white border border-gray-300 mt-1 rounded-lg shadow-md w-full max-h-60 overflow-y-auto z-50">
+                            {filteredResults.map((result) => (
+                                <Link href={`/projects/${result.id}`} key={result.id}>
+                                    <div
+                                        className="p-2 hover:bg-gray-100 cursor-pointer"
+                                        onClick={() => {
+                                            setSearch('');
+                                            setFilteredResults([]);
+                                        }}
+                                    >
+                                        {result.name} ({result.venue || 'No Venue'})
+                                    </div>
+                                </Link>
+                            ))}
+                        </div>
+                    )}
                 </div>
             </div>
 
