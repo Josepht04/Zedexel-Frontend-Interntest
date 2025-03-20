@@ -95,6 +95,11 @@ const ViewProject = ({ params }: { params: Promise<{ id: string }> }) => {
                                 <div><Lens><Image src='/Images/exhibitionstall32.jpg' alt='stall pic2' width={400} height={400} /></Lens></div>
                                 <div><Lens><Image src='/Images/exhibitionstall30.jpeg' alt='stall pic3' width={400} height={400} /></Lens></div>
                             </div>
+                            <div className='flex flex-row gap-20 mt-5'>
+                                <div><Lens><Image src='/Images/exhibitionstall29.jpeg' alt='stall pic4' width={400} height={400} /></Lens></div>
+                                <div><Lens><Image src='/Images/exhibitionstall31.jpeg' alt='stall pic5' width={400} height={400} /></Lens></div>
+                                <div><Lens><Image src='/Images/exhibitionstall33.jpeg' alt='stall pic6' width={400} height={400} /></Lens></div>
+                            </div>
                         </div>
                     </>
                 );
