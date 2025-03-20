@@ -20,7 +20,7 @@ const ViewProject = ({ params }: { params: { id: string } }) => {
         totalSqmtr?: string;
         status?: string;
     }
-    
+
     const [project, setProject] = useState<Project | null>(null);
     const [allProjects, setAllProjects] = useState<Project[]>([]);
     const [search, setSearch] = useState('');
@@ -68,12 +68,12 @@ const ViewProject = ({ params }: { params: { id: string } }) => {
                     <>
                         <div className="flex flex-row gap-20">
                             <Image
-                                src={project.userImgURL}
+                                src={project.userImgURL || '/Images/default-user.png'}
                                 alt='User image'
                                 width={250}
                                 height={250}
                                 className="rounded-full"
-                            ></Image>
+                            />
                             <div className="grid grid-cols-4 h-50 w-200 relative top-8">
                                 <div className="text-gray-400">Start Date<div className="text-black">{project.startDate || "NULL"}</div></div>
                                 <div className="text-gray-400">End Date<div className="text-black">{project.endDate || "NULL"}</div></div>
@@ -87,16 +87,16 @@ const ViewProject = ({ params }: { params: { id: string } }) => {
                             </div>
                         </div>
 
-                        <div className='flex flex-col gap-20'>
+                        <div className='flex flex-col gap-20 mt-10'>
                             <div className='flex flex-row gap-20'>
-                                <div><Lens><Image src='/Images/exhibitionstall28.jpg' alt='stall pic1' width={400} height={400}></Image></Lens></div>
-                                <div><Lens><Image src='/Images/exhibitionstall32.jpg' alt='stall pic2' width={400} height={400}></Image></Lens></div>
-                                <div><Lens><Image src='/Images/exhibitionstall30.jpeg' alt='' width={400} height={400}></Image></Lens></div>
+                                <div><Lens><Image src='/Images/exhibitionstall28.jpg' alt='stall pic1' width={400} height={400} /></Lens></div>
+                                <div><Lens><Image src='/Images/exhibitionstall32.jpg' alt='stall pic2' width={400} height={400} /></Lens></div>
+                                <div><Lens><Image src='/Images/exhibitionstall30.jpeg' alt='stall pic3' width={400} height={400} /></Lens></div>
                             </div>
-                            <div className='flex flex-row gap-20'>
-                                <div><Lens><Image src='/Images/exhibitionstall29.jpeg' alt='' width={400} height={400}></Image></Lens></div>
-                                <div><Lens><Image src='/Images/exhibitionstall31.jpeg' alt='stall pic2' width={400} height={400}></Image></Lens></div>
-                                <div><Lens><Image src='/Images/exhibitionstall33.jpeg' alt='stall pic1' width={400} height={400}></Image></Lens></div>
+                            <div className='flex flex-row gap-20 mt-5'>
+                                <div><Lens><Image src='/Images/exhibitionstall29.jpeg' alt='stall pic4' width={400} height={400} /></Lens></div>
+                                <div><Lens><Image src='/Images/exhibitionstall31.jpeg' alt='stall pic5' width={400} height={400} /></Lens></div>
+                                <div><Lens><Image src='/Images/exhibitionstall33.jpeg' alt='stall pic6' width={400} height={400} /></Lens></div>
                             </div>
                         </div>
                     </>
@@ -112,7 +112,7 @@ const ViewProject = ({ params }: { params: { id: string } }) => {
 
     return (
         <>
-            <div className="fixed top-1 h-30 w-full pr-44 z-20 bg-white flex justify-between items-center mb-4">
+            <div className="fixed top-1 h-30 w-full pr-44 z-50 bg-white flex justify-between items-center mb-4">
                 <h2 className="font-bold text-2xl font-Oswald">{project.name}</h2>
                 <div className="relative">
                     <Search className="absolute left-2 text-gray-500" size={20} style={{ top: '11' }} />
@@ -122,18 +122,6 @@ const ViewProject = ({ params }: { params: { id: string } }) => {
                         value={search}
                         onChange={(e) => setSearch(e.target.value)}
                     />
-
-                    {filteredResults.length > 0 && (
-                        <div className="absolute mt-1 bg-white border border-gray-300 rounded-md shadow-lg w-full max-h-60 overflow-y-auto z-50">
-                            {filteredResults.map((result) => (
-                                <Link href={`/projects/${result.id}`} key={result.id}>
-                                    <div className="p-2 hover:bg-gray-200 cursor-pointer">
-                                        {result.name} - {result.venue}
-                                    </div>
-                                </Link>
-                            ))}
-                        </div>
-                    )}
                 </div>
             </div>
 
@@ -141,7 +129,7 @@ const ViewProject = ({ params }: { params: { id: string } }) => {
                 {['Details', 'Contractors', 'Quotations'].map((tab) => (
                     <div
                         key={tab}
-                        className={`cursor-pointer pb-2 ${activeTab === tab ? 'text-2xl font-bold text-blue-900 border-b-4 border-blue-900' : 'text-gray-500'}`}
+                        className={`cursor-pointer pb-2 z-10 ${activeTab === tab ? 'text-2xl font-bold text-blue-900 border-b-4 border-blue-900' : 'text-gray-500'}`}
                         onClick={() => setActiveTab(tab)}
                     >
                         {tab}
