@@ -1,13 +1,20 @@
 "use client"
-import React from "react";
+import React, { useState, useEffect } from "react";
 import Image from "next/image";
 import { Search } from "lucide-react";
-import{useState,useEffect} from "react";
 
-const Users=()=>{
-    const[search,setSearch]=useState('');
-    const [allUsers, setAllUsers] = useState([]);
-    const [filteredUsers, setFilteredUsers] = useState([]);
+// Define the User interface
+interface User {
+    id: string;
+    name: string;
+    userImgURL?: string;
+    location?: string;
+}
+
+const Users: React.FC = () => {
+    const [search, setSearch] = useState('');
+    const [allUsers, setAllUsers] = useState<User[]>([]);
+    const [filteredUsers, setFilteredUsers] = useState<User[]>([]);
 
     useEffect(() => {
         const fetchUsers = async () => {
@@ -24,23 +31,18 @@ const Users=()=>{
         fetchUsers();
     }, []);
 
-
     useEffect(() => {
         if (search.trim() === '') {
-            // Display all users when search box is empty
-            setFilteredUsers(allUsers);
+            setFilteredUsers(allUsers); // Display all users when search box is empty
         } else {
-            // Apply filtering only when there's a search value
-            const filtered = allUsers.filter((user: any) =>
+            const filtered = allUsers.filter((user: User) =>
                 user.name.toLowerCase().includes(search.toLowerCase()) ||
-                user.location.toLowerCase().includes(search.toLowerCase())
+                (user.location?.toLowerCase().includes(search.toLowerCase()) ?? false)
             );
             setFilteredUsers(filtered);
         }
     }, [search, allUsers]);
 
-    console.log(search)
-    console.log(allUsers)
     return (
         <>
             <div className="fixed top-1 w-full pr-44 z-20 bg-white flex justify-between items-center mb-4">
@@ -60,7 +62,7 @@ const Users=()=>{
             <div className="mt-20 p-4">
                 {filteredUsers.length > 0 ? (
                     <div className="grid grid-cols-3 gap-4">
-                        {filteredUsers.map((user: any) => (
+                        {filteredUsers.map((user: User) => (
                             <div key={user.id} className="p-4 border rounded-lg shadow">
                                 <Image
                                     src={user.userImgURL || "/Images/default-user.png"}
