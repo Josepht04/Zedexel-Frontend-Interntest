@@ -1,28 +1,27 @@
 "use client"
 import Link from "next/link";
 import Image from "next/image";
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, use } from "react";
 import { Lens } from "@/components/magicui/lens";
 import { Search } from "lucide-react";
-import { use } from "react";
+
+interface Project {
+    id: string;
+    name: string;
+    userImgURL: string;
+    startDate?: string;
+    endDate?: string;
+    venue?: string;
+    venueCity?: string;
+    venueCountry?: string;
+    venueHallno?: string;
+    venueStandno?: string;
+    totalSqmtr?: string;
+    status?: string;
+}
 
 const ViewProject = ({ params }: { params: Promise<{ id: string }> }) => {
-    const { id } = use(params);
-
-    interface Project {
-        id: string;
-        name: string;
-        userImgURL: string;
-        startDate?: string;
-        endDate?: string;
-        venue?: string;
-        venueCity?: string;
-        venueCountry?: string;
-        venueHallno?: string;
-        venueStandno?: string;
-        totalSqmtr?: string;
-        status?: string;
-    }
+    const projectParams = use(params);
 
     const [project, setProject] = useState<Project | null>(null);
     const [allProjects, setAllProjects] = useState<Project[]>([]);
@@ -35,7 +34,7 @@ const ViewProject = ({ params }: { params: Promise<{ id: string }> }) => {
             try {
                 const response = await fetch('/db.json');
                 const result = await response.json();
-                const foundProject = result.projects.find((p: Project) => p.id.toString() === params.id);
+                const foundProject = result.projects.find((p: Project) => p.id.toString() === projectParams.id);
 
                 setProject(foundProject || null);
                 setAllProjects(result.projects);
@@ -45,7 +44,7 @@ const ViewProject = ({ params }: { params: Promise<{ id: string }> }) => {
         };
 
         fetchProjects();
-    }, [params.id]);
+    }, [projectParams.id]);
 
     useEffect(() => {
         if (search.trim() === '') {
@@ -67,7 +66,6 @@ const ViewProject = ({ params }: { params: Promise<{ id: string }> }) => {
     const renderTabContent = () => {
         switch (activeTab) {
             case 'Details':
-               case 'Details':
                 return (
                     <>
                         <div className="flex flex-row gap-20">
@@ -97,11 +95,6 @@ const ViewProject = ({ params }: { params: Promise<{ id: string }> }) => {
                                 <div><Lens><Image src='/Images/exhibitionstall32.jpg' alt='stall pic2' width={400} height={400} /></Lens></div>
                                 <div><Lens><Image src='/Images/exhibitionstall30.jpeg' alt='stall pic3' width={400} height={400} /></Lens></div>
                             </div>
-                            <div className='flex flex-row gap-20 mt-5'>
-                                <div><Lens><Image src='/Images/exhibitionstall29.jpeg' alt='stall pic4' width={400} height={400} /></Lens></div>
-                                <div><Lens><Image src='/Images/exhibitionstall31.jpeg' alt='stall pic5' width={400} height={400} /></Lens></div>
-                                <div><Lens><Image src='/Images/exhibitionstall33.jpeg' alt='stall pic6' width={400} height={400} /></Lens></div>
-                            </div>
                         </div>
                     </>
                 );
@@ -130,13 +123,7 @@ const ViewProject = ({ params }: { params: Promise<{ id: string }> }) => {
                         <div className="absolute bg-white border border-gray-300 mt-1 rounded-lg shadow-md w-full max-h-60 overflow-y-auto z-50">
                             {filteredResults.map((result) => (
                                 <Link href={`/projects/${result.id}`} key={result.id}>
-                                    <div
-                                        className="p-2 hover:bg-gray-100 cursor-pointer"
-                                        onClick={() => {
-                                            setSearch('');
-                                            setFilteredResults([]);
-                                        }}
-                                    >
+                                    <div className="p-2 hover:bg-gray-100 cursor-pointer">
                                         {result.name} ({result.venue || 'No Venue'})
                                     </div>
                                 </Link>
