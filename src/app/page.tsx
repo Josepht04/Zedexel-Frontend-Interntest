@@ -1,6 +1,5 @@
 import React from "react";
 import Image from "next/image";
-import { Globe } from "@/components/magicui/globe";
 import { Lens } from "@/components/magicui/lens";
 
 const Explore = () => {

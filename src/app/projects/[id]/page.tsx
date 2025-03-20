@@ -18,12 +18,13 @@ const ViewProject = ({ params }: { params: { id: string } }) => {
         venueHallno?: string;
         venueStandno?: string;
         totalSqmtr?: string;
+        status?: string;
     }
     
     const [project, setProject] = useState<Project | null>(null);
-    const [allProjects, setAllProjects] = useState([]);
+    const [allProjects, setAllProjects] = useState<Project[]>([]);
     const [search, setSearch] = useState('');
-    const [filteredResults, setFilteredResults] = useState([]);
+    const [filteredResults, setFilteredResults] = useState<Project[]>([]);
     const [activeTab, setActiveTab] = useState('Details');
 
     useEffect(() => {
@@ -31,9 +32,9 @@ const ViewProject = ({ params }: { params: { id: string } }) => {
             try {
                 const response = await fetch('/db.json');
                 const result = await response.json();
-                const foundProject = result.projects.find((p: any) => p.id.toString() === params.id);
+                const foundProject = result.projects.find((p: Project) => p.id.toString() === params.id);
 
-                setProject(foundProject);
+                setProject(foundProject || null);
                 setAllProjects(result.projects);
             } catch (error) {
                 console.error("Error fetching project data:", error);
@@ -48,9 +49,9 @@ const ViewProject = ({ params }: { params: { id: string } }) => {
             setFilteredResults([]);
         } else {
             const results = allProjects.filter(
-                (p: any) =>
+                (p: Project) =>
                     p.name.toLowerCase().includes(search.toLowerCase()) ||
-                    p.venue.toLowerCase().includes(search.toLowerCase())
+                    (p.venue && p.venue.toLowerCase().includes(search.toLowerCase()))
             );
             setFilteredResults(results);
         }
@@ -60,7 +61,6 @@ const ViewProject = ({ params }: { params: { id: string } }) => {
         return <div>Project Not Found</div>;
     }
 
-    // Render the content for each tab
     const renderTabContent = () => {
         switch (activeTab) {
             case 'Details':
@@ -74,16 +74,16 @@ const ViewProject = ({ params }: { params: { id: string } }) => {
                                 height={250}
                                 className="rounded-full"
                             ></Image>
-                            <div className="grid grid-cols-4 h-50 w-200 relative top-8"> {/* Creates a 2-column grid */}
+                            <div className="grid grid-cols-4 h-50 w-200 relative top-8">
                                 <div className="text-gray-400">Start Date<div className="text-black">{project.startDate || "NULL"}</div></div>
                                 <div className="text-gray-400">End Date<div className="text-black">{project.endDate || "NULL"}</div></div>
                                 <div className="text-gray-400">Venue Name<div className="text-black">{project.venue || "NULL"}</div></div>
                                 <div className="text-gray-400">Venue City<div className="text-black">{project.venueCity || "NULL"}</div></div>
 
-                                <div className="text-gray-400">Venue country<div className="text-black">{project.venueCountry || "NULL"}</div></div>
-                                <div className="text-gray-400">Venue hall number<div className="text-black">{project.venueHallno || "NULL"}</div></div>
-                                <div className="text-gray-400">Venue stand number<div className="text-black">{project.venueStandno || "NULL"}</div></div>
-                                <div className="text-gray-400">Total sq. mtr<div className="text-black">{project.totalSqmtr || "NULL"}</div></div>
+                                <div className="text-gray-400">Venue Country<div className="text-black">{project.venueCountry || "NULL"}</div></div>
+                                <div className="text-gray-400">Venue Hall Number<div className="text-black">{project.venueHallno || "NULL"}</div></div>
+                                <div className="text-gray-400">Venue Stand Number<div className="text-black">{project.venueStandno || "NULL"}</div></div>
+                                <div className="text-gray-400">Total Sq. Mtr<div className="text-black">{project.totalSqmtr || "NULL"}</div></div>
                             </div>
                         </div>
 
@@ -97,11 +97,6 @@ const ViewProject = ({ params }: { params: { id: string } }) => {
                                 <div><Lens><Image src='/Images/exhibitionstall29.jpeg' alt='' width={400} height={400}></Image></Lens></div>
                                 <div><Lens><Image src='/Images/exhibitionstall31.jpeg' alt='stall pic2' width={400} height={400}></Image></Lens></div>
                                 <div><Lens><Image src='/Images/exhibitionstall33.jpeg' alt='stall pic1' width={400} height={400}></Image></Lens></div>
-                            </div>
-                            <div className='flex flex-row gap-20'>
-                                <div><Lens><Image src='/Images/exhibitionstall30.jpeg' alt='' width={400} height={400}></Image></Lens></div>
-                                <div><Lens><Image src='/Images/exhibitionstall32.jpg' alt='stall pic2' width={400} height={400}></Image></Lens></div>
-                                <div><Lens><Image src='/Images/exhibitionstall28.jpg' alt='stall pic1' width={400} height={400}></Image></Lens></div>
                             </div>
                         </div>
                     </>
@@ -128,10 +123,9 @@ const ViewProject = ({ params }: { params: { id: string } }) => {
                         onChange={(e) => setSearch(e.target.value)}
                     />
 
-                    {/* Dropdown for search results */}
                     {filteredResults.length > 0 && (
                         <div className="absolute mt-1 bg-white border border-gray-300 rounded-md shadow-lg w-full max-h-60 overflow-y-auto z-50">
-                            {filteredResults.map((result: any) => (
+                            {filteredResults.map((result) => (
                                 <Link href={`/projects/${result.id}`} key={result.id}>
                                     <div className="p-2 hover:bg-gray-200 cursor-pointer">
                                         {result.name} - {result.venue}
@@ -143,7 +137,6 @@ const ViewProject = ({ params }: { params: { id: string } }) => {
                 </div>
             </div>
 
-            {/* Tabs */}
             <div className="mt-28 flex gap-5 border-b-2 border-gray-200">
                 {['Details', 'Contractors', 'Quotations'].map((tab) => (
                     <div
@@ -156,7 +149,6 @@ const ViewProject = ({ params }: { params: { id: string } }) => {
                 ))}
             </div>
 
-            {/* Tab Content */}
             <div className="mt-4 p-4 bg-white rounded-xl shadow-md">
                 {renderTabContent()}
             </div>
