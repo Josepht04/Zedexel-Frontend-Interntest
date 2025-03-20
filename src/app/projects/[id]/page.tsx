@@ -6,7 +6,21 @@ import { Lens } from "@/components/magicui/lens";
 import { Search } from "lucide-react";
 
 const ViewProject = ({ params }: { params: { id: string } }) => {
-    const [project, setProject] = useState(null);
+    interface Project {
+        id: string;
+        name: string;
+        userImgURL: string;
+        startDate?: string;
+        endDate?: string;
+        venue?: string;
+        venueCity?: string;
+        venueCountry?: string;
+        venueHallno?: string;
+        venueStandno?: string;
+        totalSqmtr?: string;
+    }
+    
+    const [project, setProject] = useState<Project | null>(null);
     const [allProjects, setAllProjects] = useState([]);
     const [search, setSearch] = useState('');
     const [filteredResults, setFilteredResults] = useState([]);

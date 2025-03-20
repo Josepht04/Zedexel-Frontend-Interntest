@@ -3,8 +3,17 @@ import React, { useEffect, useState } from "react";
 import Link from "next/link";
 import { Search } from "lucide-react";
 
-const Projects = () => {
-    const [projects, setProjects] = useState([]);
+interface Project {
+    id: string;
+    name: string;
+    startDate: string;
+    endDate: string;
+    status: string;
+    venue: string;
+}
+
+const Projects: React.FC = () => {
+    const [projects, setProjects] = useState<Project[]>([]);
     const [search, setSearch] = useState('');
 
     useEffect(() => {
@@ -21,9 +30,10 @@ const Projects = () => {
         fetchProjects();
     }, []);
 
-    const filteredProjects=search===''?projects:projects.filter((project) =>
-        project.name.toLowerCase().includes(search.toLowerCase()))||projects.filter((project) =>
-            project.venue.toLowerCase().includes(search.toLowerCase()));
+    const filteredProjects = search === '' ? projects : projects.filter((project) =>
+        project.name.toLowerCase().includes(search.toLowerCase()) ||
+        project.venue.toLowerCase().includes(search.toLowerCase())
+    );
 
     return (
         <>
@@ -50,10 +60,10 @@ const Projects = () => {
 
                 <div className="mt-8">
                     {filteredProjects
-                        .sort((a, b) => new Date(b.endDate) - new Date(a.endDate))
+                        .sort((a, b) => new Date(b.endDate).getTime() - new Date(a.endDate).getTime())
                         .map((project) => (
-                            <Link href={`/projects/${project.id}`}>
-                                <div key={project.id} className='grid grid-cols-5 gap-4 p-3 border-b items-center'>
+                            <Link key={project.id} href={`/projects/${project.id}`}>
+                                <div className='grid grid-cols-5 gap-4 p-3 border-b items-center'>
                                     <div className="col-span-1" style={{ width: "390px" }}>{project.name}</div>
                                     <div className="col-span-1 ml-40">{project.startDate}</div>
                                     <div className="ml-10" style={{ width: "100px" }}>{project.endDate}</div>
@@ -66,7 +76,8 @@ const Projects = () => {
                                         {project.status}
                                     </div>
                                     <div className="col-span-1">{project.venue}</div>
-                                </div></Link>
+                                </div>
+                            </Link>
                         ))
                     }
                 </div>
