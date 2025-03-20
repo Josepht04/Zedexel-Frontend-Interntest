@@ -20,8 +20,9 @@ const Projects: React.FC = () => {
         const fetchProjects = async () => {
             try {
                 const response = await fetch('/db.json');
-                const result = await response.json();
+                const result = await response.json() as { projects: Project[] };
                 setProjects(result.projects);
+
             } catch (error) {
                 console.error("Error fetching projects:", error);
             }
